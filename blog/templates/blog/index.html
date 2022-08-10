@@ -1,28 +1,47 @@
 {% extends 'blog/base.html' %}
 
-{% block main_area%}
-    <h1>Blog</h1>
+{% block main_area %}
+    
+    <h1>Blog 
+        {% if category %}<span class="badge badge-secondary">{{ category }}</span>{% endif %}
+        {% if tag %}<span class="badge badge-dark"><i class="fas fa-tags"></i>{{ tag }} ({{ tag.post_set.count }})</span>{% endif %}
+    </h1>
+
     {% if post_list.exists %}
         {% for p in post_list %}
         <!-- Blog post-->
-        <div class="card lg-8">
+        <div class="card mb-4" id="post-{{ p.pk }}">
             <!-- 이미지가 없어도 오류 안나게 하는 것 -->
             {% if p.head_image %}
-                <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head im-age">
+                <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
             {% else %}
                 <img class="card-img-top" src="http://picsum.photos/seed/{{ p.id }}/550/350" alt="random_image">
             {% endif %}
             <div class="card-body">
+                {% if p.category %}
+                    <span class="badge badge-secondary float-right">{{ p.category }}</span>
+                {% else %}
+                    <span class="badge badge-secondary float-right">미분류</span>
+                {% endif %}
                 <h2 class="card-title">{{ p.title }}</h2>
                 {% if p.hook_text %}
                     <h5 class="text-muted">{{ p.hook_text }}</h5>
                 {% endif %}
                 <p class="card-text">{{ p.content | truncatewords:45 }}</p>
+                {% if p.tags.exists %}
+                    <i calss="fas fa-tags"></i>
+                    {% for tag in p.tags.iterator %}
+                        <a href="{{ tag.get_absolute_url }}"><span class="badge badge-dark"><i class="fas fa-tags"></i>{{ tag }}</span></a>
+                    {% endfor %}
+                    <br/>
+                    <br/>
+                {% endif %}
+
                 <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read More &rarr;</a>
             </div>
             <div clss="card-footer text-muted">
                 Posted on {{ p.created_at }} by
-                <a href="#">작성자명 쓸 위치(개발예정)</a>
+                <a href="#">{{ p.author | upper }}</a>
             </div>
         </div>
         {% endfor %}
