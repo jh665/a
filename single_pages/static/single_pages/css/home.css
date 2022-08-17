@@ -6,14 +6,17 @@ body {
     -o-background-size: cover;
 }
 
-body > h1{
-    color: white;
-    text-shadow: -2px 0 #000, 0 2px #000, 2px 0 #000, 0 -2px #000;;
-}
-
 
 section {
     margin-bottom: 150px;
+}
+
+div > h1,h2{
+    text-shadow: 3px 3px 3px black;
+}
+
+div > p{
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 
 .card {
